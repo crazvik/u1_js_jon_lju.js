@@ -5,14 +5,25 @@
         <title>Draw&Hope</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="styles/style.css">
+        <script src="scripts/index.js"></script>
     </head>
     <body>
-        <section>
+        <section id="mainWindow">
             <h1>Draw&Hope</h1>
-            <input type="button" value="Hit">
-            <input type="button" value="Stay">
+            <button id="hit" type="button" onclick="keepPlaying()">Hit</button>
+            <button id="stay" type="button" onclick="stopPlaying()">Stay</button>
+            <p style="display: none;" id="helpText">Press D to draw another card</p>
+            <div id="popupWindow">
+                <div id="modal">
+                    <p>Player score: </p>
+                    <p id="playerScore"></p><br>
+                    <p>Computer score: </p>
+                    <p id="computerScore"></p><br>
+                    <p id="message"></p>
+                </div>
+            </div>
         </section>
-        <script src="scripts/index.js" async defer></script>
+        <script src="scripts/index.js"></script>
     </body>
 </html>
