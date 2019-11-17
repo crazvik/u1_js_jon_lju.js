@@ -7,21 +7,3 @@ h1 {
     margin: 0px, 0px;
     text-align: center;
 }
-button {
-    display: block;
-    margin: auto;
-    margin-top: 5px;
-    width: 100px;
-}
-#popupWindow {
-    display: none;
-    background-color: white;
-    width: 50%;
-    margin: auto;
-    margin-top: 30px;
-    padding: 20px;
-}
-#modal {
-    display: none;
-    text-align: center;
-}

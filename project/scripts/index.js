@@ -1,96 +1,136 @@
+/**
+ * @param int array för alla valörer, samt en tom som ska innehålla kortleken.
+ * @param int playerScore och computerScore innehåller båda spelarnas poäng.
+ * @param boolean keepHitting används för att fortsätta spelet tills det att man
+ * väljer att stanna.
+*/
 var values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 var deck = new Array();
-var playerScore, computerScore, keepHitting;
+var playerScore = 0,
+    computerScore = 0,
+    keepHitting = true;
 
+/**
+ * @description skapar en ny kortlek och blandar den med hjälp av den moderna
+ * versionen av Fisher-Yates algoritmen. Koden sparar det sista elementet i
+ * arrayen och byter sedan detta mot ett slumpvist valt element (kort) i
+ * arrayen. Därefter när hela kortleken har blandats delas ett kort ut till
+ * spelaren, och två till datorn.
+ * @param int i och j används enligt "standard-sättet" i for-loopar.
+ * @param int temp sparar det översta kortet i kortleken för att sedan läggas i
+ * det slumpade kortets plats.
+ * @param int card är kortet som dragits.
+ */
 window.onload = function newDeckAndShuffle() {
-    for(var i=0; i<4; i++) {
-        for(var j=1; j<=values.length; j++) {
+    for(let i=0; i<4; i++) {
+        for(let j=1; j<=values.length; j++) {
             deck.push(j);
         }
     }
     for (var i=deck.length-1; i>0; i--) {
-        var j = Math.floor(Math.random()*(i+1));
-        var temp = deck[i];
+        let j = Math.floor(Math.random()*(i+1));
+        let temp = deck[i];
         deck[i] = deck[j];
         deck[j] = temp;
     }
-    this.playerScore=0;
-    this.computerScore=0;
-    this.keepHitting=true;
-    document.getElementById("playerScore").innerHTML = 0;
-    document.getElementById("computerScore").innerHTML = 0;
-
-    var temp = deck.shift();
-    console.log("Player drew: " + temp);
-    playerScore+=temp;
-    document.getElementById("playerScore").innerHTML = this.playerScore;
-    console.log("Player score: " + playerScore);
-    for(var i=0; i<2; i++) {
-        temp = deck.shift();
-        console.log("Computer drew: " + temp);
-        computerScore+=temp;
-        document.getElementById("computerScore").innerHTML = this.computerScore;
+    let card = deck.shift();
+    console.log("Player drew: " + card);
+    playerScore+=card;
+    console.log("Player score: " + this.playerScore);
+    for(let i=0; i<2; i++) {
+        card = deck.shift();
+        console.log("Computer drew: " + card);
+        computerScore+=card;
         console.log("Computer score: " + this.computerScore);
     }
-    
 }
+/**
+ * @description lägger till att sidan kan läsa av knapptryckningar på sidans
+ * body. Keydown läser av när en tagent trycks ned, sedan kollar if-satserna om
+ * knappen i fråga är knapp 68 eller 83 (D respektive S).
+ */
+document.body.addEventListener("keydown", function(event) {
+    if (event.keyCode == 68) {
+        keepPlaying();
+    }
+    else if(event.keyCode == 83) {
+        stopPlaying();
+    }
+});
 
+/**
+ * @description först kollas om keepHitting är true. En if-sats används istället
+ * for en while-loop eftersom man vill kolla "manuellt" efter varje
+ * knapptryckning. En while-loop går tills villkoret inte stämmer längre.
+ * Därefter om playerScore är mindre än 21 dras ett kort som läggs till i
+ * spelarens poäng. Om detta gör att spelarens poäng blir lika med eller större
+ * än 21 avslutas spelet med hjälp av result-funktionen.
+ * @param card är kortet som dragits. (samma som ovan).
+ */
 function keepPlaying() {
     if(keepHitting===true) {
         if(playerScore<21) {
-            var temp = deck.shift();
-            console.log("Player drew: " + temp);
-            playerScore+=temp;
+            let card = deck.shift();
+            console.log("Player drew: " + card);
+            playerScore+=card;
             console.log("Player score: " + playerScore);
-            document.getElementById("playerScore").innerHTML = this.playerScore;
             if(playerScore===21) {
-                scoreCalculation();
+                results();
             }
             else if(playerScore>21) {
-                scoreCalculation();
+                results();
             }
         }
     }
 }
 
+/**
+ * @description när spelaren stannar kommer keepHitting ändras till false om
+ * keepHitting inte redan är det (för att förhindra upprepning om man trycker
+ * flera gånger på S). Därefter kommer datorn dra ETT kort om dennes poäng är
+ * under 17, sedan räknas resultatet ut.
+ * @param card är kortet som dragits. (samma som ovan).
+ */
 function stopPlaying() {
     if(keepHitting!=false) {
         keepHitting = false;
-        var temp = deck.shift();
-        console.log("Computer drew: " + temp);
-        computerScore+=temp;
-        console.log("Computer score: " + this.computerScore);
-        document.getElementById("computerScore").innerHTML = this.computerScore;
+        if(computerScore<17) {
+            let card = deck.shift();
+            console.log("Computer drew: " + card);
+            computerScore+=card;
+            console.log("Computer score: " + this.computerScore);
+        }
     }
-    scoreCalculation();
+    results();
 }
 
-function scoreCalculation() {
-    keepHitting = false;
-    document.getElementById("modal").style.display = "inline";
-    document.getElementById("popupWindow").style.display = "block";
+/**
+ * @description här räknas poängen för att se vem som vunnit. Resultatet dyker
+ * sedan upp i en alert på sidan med respektive poäng och om det blev vinst,
+ * förlust eller oavgjort.
+ */
+function results() {
     if(computerScore>21) {
-        
-        document.getElementById("message").innerHTML = "You win!";
+        alert("Player score: " + this.playerScore + "\n\nComputer score: " + this.computerScore + "\n\nYou win!");
     }
     else if(playerScore>21) {
-        document.getElementById("message").innerHTML = "You lose!";
+        alert("Player score: " + this.playerScore + "\n\nComputer score: " + this.computerScore + "\n\nYou lose!");
     }
     else if(computerScore===21) {
-        document.getElementById("message").innerHTML = "You lose!";
+        alert("Player score: " + this.playerScore + "\n\nComputer score: " + this.computerScore + "\n\nYou lose!");
     }
     else if(playerScore===21) {
-        document.getElementById("message").innerHTML = "You win!";
+        alert("Player score: " + this.playerScore + "\n\nComputer score: " + this.computerScore + "\n\nYou win!");
     }
     else if(playerScore===computerScore) {
-        document.getElementById("message").innerHTML = "Tie!";
+        alert("Player score: " + this.playerScore + "\n\nComputer score: " + this.computerScore + "\n\nTie!");
     }
     else if(computerScore<21 && playerScore<21) {
         if(playerScore>computerScore) {
-            document.getElementById("message").innerHTML = "You win!";
+            alert("Player score: " + this.playerScore + "\n\nComputer score: " + this.computerScore + "\n\nYou win!");
         }
         else {      
-            document.getElementById("message").innerHTML = "You lose!";
+            alert("Player score: " + this.playerScore + "\n\nComputer score: " + this.computerScore + "\n\nYou lose!");
         }
     }
 }
